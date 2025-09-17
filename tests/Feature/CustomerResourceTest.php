@@ -2,6 +2,7 @@
 
 use App\Filament\Resources\Customers\Pages\EditCustomer;
 use App\Models\Customer;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\Testing\TestAction;
 
 use function Pest\Livewire\livewire;
