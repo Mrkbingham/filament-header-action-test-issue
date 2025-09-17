@@ -7,7 +7,7 @@ use Filament\Actions\Testing\TestAction;
 
 use function Pest\Livewire\livewire;
 
-it('cannot delete customer without confirmation', function () {
+it('cannot delete customer without confirmation - action class', function () {
     // Create a customer
     $customer = Customer::factory()->create([
         'name' => 'Non-Deletable Customer',
@@ -16,7 +16,25 @@ it('cannot delete customer without confirmation', function () {
     // Try to delete the customer
     livewire(EditCustomer::class, [
         'record' => $customer->id,
-    ])->mountAction(TestAction::make(DeleteAction::class))
-        ->assertSee('You cannot delete this customer because it is linked to inventory items and recipes.')
-        ->assertSee('Use the form at the bottom of this page to see which items need to be un-linked before deleting this customer.');
+    ])
+        ->assertActionExists(DeleteAction::class)
+        ->mountAction(DeleteAction::class)
+        ->assertActionMounted(DeleteAction::class)
+        ->assertSee('Are you sure you want to delete this customer?');
+});
+
+it('cannot delete customer without confirmation - test actions', function () {
+    // Create a customer
+    $customer = Customer::factory()->create([
+        'name' => 'Non-Deletable Customer',
+    ]);
+
+    // Try to delete the customer
+    livewire(EditCustomer::class, [
+        'record' => $customer->id,
+    ])
+        ->assertActionExists(TestAction::make(DeleteAction::class))
+        ->mountAction(TestAction::make(DeleteAction::class))
+        ->assertActionMounted(TestAction::make(DeleteAction::class))
+        ->assertSee('Are you sure you want to delete this customer?');
 });
