@@ -20,6 +20,7 @@ it('cannot delete customer without confirmation - action class', function () {
         ->assertHasNoFormErrors()
         ->assertActionExists(DeleteAction::class)
         ->mountAction(DeleteAction::class)
+        // ->callAction(DeleteAction::class)
         ->assertActionMounted(DeleteAction::class)
         ->assertSee('Header modal content');
 });
@@ -37,6 +38,7 @@ it('cannot delete customer without confirmation - test actions', function () {
         ->assertHasNoFormErrors()
         ->assertActionExists(TestAction::make(DeleteAction::class))
         ->mountAction(TestAction::make(DeleteAction::class))
+        // ->callAction(TestAction::make(DeleteAction::class))
         ->assertActionMounted(TestAction::make(DeleteAction::class))
         ->assertSee('Header modal content');
 });
@@ -54,6 +56,7 @@ it('cannot delete customer without confirmation - form delete action', function 
         ->assertHasNoFormErrors()
         ->assertActionExists(TestAction::make('formDeleteAction'))
         ->mountAction(TestAction::make('formDeleteAction'))
+        // ->callAction(TestAction::make('formDeleteAction'))
         ->assertActionMounted(TestAction::make('formDeleteAction'))
         ->assertSee('Form action modal content');
 });
