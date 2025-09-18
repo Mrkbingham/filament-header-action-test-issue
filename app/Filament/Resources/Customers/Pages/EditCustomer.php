@@ -16,7 +16,7 @@ class EditCustomer extends EditRecord
         return [
             DeleteAction::make()
                 ->modalContent(
-                    new HtmlString('Are you sure you want to delete this customer? This action cannot be undone.')
+                    new HtmlString('Header modal content')
                 ),
         ];
     }

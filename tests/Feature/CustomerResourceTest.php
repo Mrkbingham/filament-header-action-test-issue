@@ -17,10 +17,11 @@ it('cannot delete customer without confirmation - action class', function () {
     livewire(EditCustomer::class, [
         'record' => $customer->id,
     ])
+        ->assertHasNoFormErrors()
         ->assertActionExists(DeleteAction::class)
         ->mountAction(DeleteAction::class)
         ->assertActionMounted(DeleteAction::class)
-        ->assertSee('Are you sure you want to delete this customer?');
+        ->assertSee('Header modal content');
 });
 
 it('cannot delete customer without confirmation - test actions', function () {
@@ -33,8 +34,43 @@ it('cannot delete customer without confirmation - test actions', function () {
     livewire(EditCustomer::class, [
         'record' => $customer->id,
     ])
+        ->assertHasNoFormErrors()
         ->assertActionExists(TestAction::make(DeleteAction::class))
         ->mountAction(TestAction::make(DeleteAction::class))
         ->assertActionMounted(TestAction::make(DeleteAction::class))
-        ->assertSee('Are you sure you want to delete this customer?');
+        ->assertSee('Header modal content');
+});
+
+it('cannot delete customer without confirmation - form delete action', function () {
+    // Create a customer
+    $customer = Customer::factory()->create([
+        'name' => 'Non-Deletable Customer',
+    ]);
+
+    // Try to delete the customer
+    livewire(EditCustomer::class, [
+        'record' => $customer->id,
+    ])
+        ->assertHasNoFormErrors()
+        ->assertActionExists(TestAction::make('formDeleteAction'))
+        ->mountAction(TestAction::make('formDeleteAction'))
+        ->assertActionMounted(TestAction::make('formDeleteAction'))
+        ->assertSee('Form action modal content');
+});
+
+it('cannot delete customer without confirmation - nested form delete action', function () {
+    // Create a customer
+    $customer = Customer::factory()->create([
+        'name' => 'Non-Deletable Customer',
+    ]);
+
+    // Try to delete the customer
+    livewire(EditCustomer::class, [
+        'record' => $customer->id,
+    ])
+        ->assertHasNoFormErrors()
+        ->assertActionExists(TestAction::make('nestedFormDeleteAction')->schemaComponent('group'))
+        ->mountAction(TestAction::make('nestedFormDeleteAction')->schemaComponent('group'))
+        ->assertActionMounted(TestAction::make('nestedFormDeleteAction')->schemaComponent('group'))
+        ->assertSee('Nested form action modal content');
 });
